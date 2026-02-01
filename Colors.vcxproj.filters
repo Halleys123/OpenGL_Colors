@@ -51,6 +51,9 @@
     <ClCompile Include="src\GlHelp.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\glad.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\WndProc.h">
@@ -1395,9 +1398,17 @@
     <None Include="include\glm\gtx\wrap.inl">
       <Filter>Header Files</Filter>
     </None>
+    <None Include=".gitattributes" />
+    <None Include=".gitignore" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Textures\texture.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Textures\roof.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Textures\height.png">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>

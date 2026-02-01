@@ -1,5 +1,6 @@
 #include "WndProc.hpp"
 
+#include "glm/glm.hpp"
 #include "glad/glad.h"
 
 HDC hdc;
@@ -53,6 +54,13 @@ static void InitOpenGL(HWND hWnd) {
 }
 
 LRESULT WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
+    static int lastMouseX = 0.0f;
+    static int lastMouseY = 0.0f;
+    int curMouseX = 0.0f, curMouseY = 0.0f;
+    float xoffset, yoffset;
+    float sensitivity = 0.11f;
+    float cameraSpeed = 0.15f;
+
 	switch (message)
 	{
     case WM_CREATE:

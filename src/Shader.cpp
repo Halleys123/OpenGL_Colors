@@ -129,3 +129,25 @@ void Shader::ModifyUniformVec3(const char* uniformName, float x, float y, float 
 
 	glUniform3f(location, x, y, z);
 }
+
+void Shader::ModifyUniform1i(const char* uniformName, int value) {
+	int location = glGetUniformLocation(this->ShaderProgramID, uniformName);
+	if (location == -1)
+	{
+		printf("Unable to find Uniform named: %s", uniformName);
+		return;
+	}
+
+	glUniform1i(location, value);
+}
+
+void Shader::ModifyUniform1f(const char* uniformName, float value) {
+	int location = glGetUniformLocation(this->ShaderProgramID, uniformName);
+	if (location == -1)
+	{
+		printf("Unable to find Uniform named: %s", uniformName);
+		return;
+	}
+
+	glUniform1f(location, value);
+}
