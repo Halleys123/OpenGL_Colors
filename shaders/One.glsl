@@ -26,9 +26,10 @@ uniform vec3 objectColor;
 uniform vec3 lightColor;
 
 uniform sampler2D tex;
+uniform sampler2D hMap;
 
 out vec4 FragColor;
 
 void main() {
-	FragColor = texture(tex, frag_uv);
+	FragColor = texture(tex, frag_uv) ;
 }

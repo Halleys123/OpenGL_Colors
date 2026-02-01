@@ -130,12 +130,12 @@
     <ClCompile Include="include\glm\detail\glm.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="src\glad.c" />
-    <ClCompile Include="src\glad.c" />
     <ClCompile Include="src\GlHelp.cpp" />
     <ClCompile Include="src\IndexBuffer.cpp" />
     <ClCompile Include="src\LoadFile.cpp" />
     <ClCompile Include="src\Mesh.cpp" />
     <ClCompile Include="src\Shader.cpp" />
+    <ClCompile Include="src\SkyBox.cpp" />
     <ClCompile Include="src\Texture.cpp" />
     <ClCompile Include="src\VertexArray.cpp" />
     <ClCompile Include="src\VertexBuffer.cpp" />
@@ -440,6 +440,7 @@
     <ClInclude Include="include\LoadFile.hpp" />
     <ClInclude Include="include\Mesh.hpp" />
     <ClInclude Include="include\Shader.hpp" />
+    <ClInclude Include="include\SkyBox.hpp" />
     <ClInclude Include="include\stb_image.h" />
     <ClInclude Include="include\Texture.hpp" />
     <ClInclude Include="include\VertexArray.h" />
@@ -452,6 +453,8 @@
   <ItemGroup>
     <None Include=".gitattributes" />
     <None Include=".gitignore" />
+    <None Include="glsl shaders\Skybox.glsl" />
+    <None Include="shaders\Skybox.glsl" />
     <None Include="include\glm\detail\func_common.inl" />
     <None Include="include\glm\detail\func_common_simd.inl" />
     <None Include="include\glm\detail\func_exponential.inl" />
@@ -594,6 +597,7 @@
     <None Include="include\glm\gtx\wrap.inl" />
     <None Include="shaders\One.glsl" />
     <None Include="shaders\Two.glsl" />
+    <None Include="Textures\skyBox.hdr" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Textures\height.png" />

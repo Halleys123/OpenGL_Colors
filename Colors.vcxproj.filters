@@ -1400,6 +1400,7 @@
     </None>
     <None Include=".gitattributes" />
     <None Include=".gitignore" />
+    <None Include="Textures\skyBox.hdr" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Textures\texture.jpg">

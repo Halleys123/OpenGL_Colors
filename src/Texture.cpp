@@ -9,15 +9,17 @@
 
 #include "Texture.hpp"
 
-Texture::Texture(const char* texturePath, int requiredComponents) : TextureID(0) {
+Texture::Texture(const char* texturePath, GLenum TextureType, GLenum InternalFormat, GLenum ExternalFormat, int requiredComponents) : TextureID(0), TextureType(TextureType){
 	if (!texturePath) {
 		throw std::invalid_argument("Texture path not provide, Please provide a valid texture path");
+		OutputDebugString("Texture path not provide, Please provide a valid texture path");
 		return;
 	}
 	stbi_set_flip_vertically_on_load(1);
 	unsigned char* image = stbi_load(texturePath, &width, &height, &components, requiredComponents);
 	
 	if (!image) {
+		OutputDebugString("No image found at provided path");
 		throw std::exception("No image found at provided path");
 		return;
 	}
@@ -32,17 +34,15 @@ Texture::Texture(const char* texturePath, int requiredComponents) : TextureID(0)
 	glSamplerParameteri(this->SamplerID, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 	glSamplerParameteri(this->SamplerID, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
-	GLenum internal_format = (components == 4) ? GL_RGBA8 : (components == 3) ? GL_RGB8 : GL_RED;
-	GLenum external_format = (internal_format == GL_RGBA8) ? GL_RGB : GL_RGB;
 	unsigned int pbo;
 	GlCall(glGenBuffers(1, &pbo));
 	GlCall(glBindBuffer(GL_PIXEL_UNPACK_BUFFER, pbo));
 	GlCall(glBufferData(GL_PIXEL_UNPACK_BUFFER, width * height * components * sizeof(unsigned char), image, GL_STATIC_DRAW));
 
-	GlCall(glTexStorage2D(GL_TEXTURE_2D, 1, internal_format, width, height));
-	GlCall(glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height, external_format, GL_UNSIGNED_BYTE, 0));
-	//GlCall(glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, image));
-    GlCall(glBindTexture(GL_TEXTURE_2D, 0));
+	GlCall(glTexStorage2D(this->TextureType, 1, InternalFormat, width, height));
+	GlCall(glTexSubImage2D(this->TextureType, 0, 0, 0, width, height, ExternalFormat, GL_UNSIGNED_BYTE, 0));
+	//GlCall(glTexImage2D(this->TextureType, 0, InternalFormat, width, height, 0, ExternalFormat, GL_UNSIGNED_BYTE, image));
+    GlCall(glBindTexture(this->TextureType, 0));
 
 	GlCall(glBindBuffer(GL_PIXEL_UNPACK_BUFFER, 0));
 	GlCall(glDeleteBuffers(1, &pbo));
@@ -58,7 +58,7 @@ void Texture::activate(int textureUnit) {
 		return;
 	}
 	glActiveTexture(GL_TEXTURE0 + textureUnit);
-	glBindTexture(GL_TEXTURE_2D, this->TextureID);
+	glBindTexture(this->TextureType, this->TextureID);
 	glBindSampler(textureUnit, this->SamplerID);
 }
 

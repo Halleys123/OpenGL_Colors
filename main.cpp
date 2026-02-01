@@ -9,6 +9,58 @@
 #include "Mesh.hpp"
 #include "Shader.hpp"
 #include "Texture.hpp"
+#include "SkyBox.hpp"
+
+
+static float data[18 * 5] = {
+	// === Bottom triangle ===
+	0.0f, 0.0f, 0.0f,   0.0f, 0.0f, // 0
+	1.0f, 0.0f, 0.0f,   1.0f, 0.0f, // 1
+	0.5f, 0.0f, 1.0f,   0.5f, 1.0f, // 2
+
+	// === Top triangle ===
+	0.0f, 1.0f, 0.0f,   0.0f, 0.0f, // 3
+	1.0f, 1.0f, 0.0f,   1.0f, 0.0f, // 4
+	0.5f, 1.0f, 1.0f,   0.5f, 1.0f, // 5
+
+	// === Side 1 (left rectangle) ===
+	0.0f, 0.0f, 0.0f,   0.0f, 0.0f, // 6
+	0.5f, 0.0f, 1.0f,   1.0f, 0.0f, // 7
+	0.0f, 1.0f, 0.0f,   0.0f, 1.0f, // 8
+	0.5f, 1.0f, 1.0f,   1.0f, 1.0f, // 9
+
+	// === Side 2 (right rectangle) ===
+	1.0f, 0.0f, 0.0f,   0.0f, 0.0f, // 10
+	0.5f, 0.0f, 1.0f,   1.0f, 0.0f, // 11
+	1.0f, 1.0f, 0.0f,   0.0f, 1.0f, // 12
+	0.5f, 1.0f, 1.0f,   1.0f, 1.0f, // 13
+
+	// === Side 3 (bottom rectangle) ===
+	0.0f, 0.0f, 0.0f,   0.0f, 0.0f, // 14
+	1.0f, 0.0f, 0.0f,   1.0f, 0.0f, // 15
+	0.0f, 1.0f, 0.0f,   0.0f, 1.0f, // 16
+	1.0f, 1.0f, 0.0f,   1.0f, 1.0f, // 17
+};
+
+static unsigned int index[24] = {
+	// Bottom triangle
+	0, 1, 2,
+
+	// Top triangle
+	3, 5, 4,
+
+	// Side 1
+	6, 7, 8,
+	7, 9, 8,
+
+	// Side 2
+	10, 11, 12,
+	11, 13, 12,
+
+	// Side 3
+	14, 15, 16,
+	15, 17, 16
+};
 
 extern HDC hdc;
 extern HGLRC rc;
@@ -50,65 +102,18 @@ int APIENTRY WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
 	int running = true;
 	MSG msg = {0};
 
-	float data[18 * 5] = {
-		// === Bottom triangle ===
-		0.0f, 0.0f, 0.0f,   0.0f, 0.0f, // 0
-		1.0f, 0.0f, 0.0f,   1.0f, 0.0f, // 1
-		0.5f, 0.0f, 1.0f,   0.5f, 1.0f, // 2
-
-		// === Top triangle ===
-		0.0f, 1.0f, 0.0f,   0.0f, 0.0f, // 3
-		1.0f, 1.0f, 0.0f,   1.0f, 0.0f, // 4
-		0.5f, 1.0f, 1.0f,   0.5f, 1.0f, // 5
-
-		// === Side 1 (left rectangle) ===
-		0.0f, 0.0f, 0.0f,   0.0f, 0.0f, // 6
-		0.5f, 0.0f, 1.0f,   1.0f, 0.0f, // 7
-		0.0f, 1.0f, 0.0f,   0.0f, 1.0f, // 8
-		0.5f, 1.0f, 1.0f,   1.0f, 1.0f, // 9
-
-		// === Side 2 (right rectangle) ===
-		1.0f, 0.0f, 0.0f,   0.0f, 0.0f, // 10
-		0.5f, 0.0f, 1.0f,   1.0f, 0.0f, // 11
-		1.0f, 1.0f, 0.0f,   0.0f, 1.0f, // 12
-		0.5f, 1.0f, 1.0f,   1.0f, 1.0f, // 13
-
-		// === Side 3 (bottom rectangle) ===
-		0.0f, 0.0f, 0.0f,   0.0f, 0.0f, // 14
-		1.0f, 0.0f, 0.0f,   1.0f, 0.0f, // 15
-		0.0f, 1.0f, 0.0f,   0.0f, 1.0f, // 16
-		1.0f, 1.0f, 0.0f,   1.0f, 1.0f, // 17
-	};
-
-	unsigned int index[24] = {
-		// Bottom triangle
-		0, 1, 2,
-
-		// Top triangle
-		3, 5, 4,
-
-		// Side 1
-		6, 7, 8,
-		7, 9, 8,
-
-		// Side 2
-		10, 11, 12,
-		11, 13, 12,
-
-		// Side 3
-		14, 15, 16,
-		15, 17, 16
-	};
-
 	Mesh cube(90, data, 24, index);
 	cube.AddVertexAttrib(0, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 5, 0);
 	//cube.AddVertexAttrib(1, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 8, (void*)(3 * sizeof(float)));
 	cube.AddVertexAttrib(2, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 5, (void*)(3 * sizeof(float)));
 
 	Shader shader("./shaders/One.glsl");
-	//Shader shader2("./shaders/Two.glsl");
-	Texture wood("./Textures/roof.jpg");
-	//Texture normalMap("./Textures/height.png");
+	//Shader skyboxShader("./shaders/Skybox.glsl");
+
+	Texture wood("./Textures/roof.jpg", GL_TEXTURE_2D, GL_RGB8, GL_RGB);
+	//Texture normalMap("./Textures/height.png", GL_TEXTURE_2D);
+
+	//SkyBox box("./Textures/skyBox.hdr");
 
 	const double targetFrameTime = 1.0 / 90.0;
 
@@ -137,10 +142,12 @@ int APIENTRY WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
 	shader.ModifyUniformVec3("lightColor", 0.1f, 0.54f, 0.23f);
 
 	shader.ModifyUniform1i("tex", 0);
+	//shader.ModifyUniform1i("hMap", 1);
 
-	//shader.ModifyUniformMat4("model", model);
-	//shader.ModifyUniformMat4("view", view);
-	//shader.ModifyUniformMat4("projection", projection);
+	// Setup skybox shader
+	//skyboxShader.UseProgram();
+	//skyboxShader.ModifyUniform1i("skybox", 0);
+	//skyboxShader.ModifyUniform1f("exposure", 1.0f);
 
 	float eyePosX = 0.0f;
 	float eyePosY = 0.0f;
@@ -149,8 +156,12 @@ int APIENTRY WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
 	float deltaTime = 0.0f;
 	float lastFrame = 0.0f;
 	
-	float speed = 2.5f;     // Units per second
+	float speed = 2.5f;     // Max speed in units per second
 	float sensitivity = 0.1f;
+	float acceleration = 10.0f;  // Units per second squared
+	float deceleration = 15.0f;  // Units per second squared (faster stop)
+	
+	glm::vec3 velocity = glm::vec3(0.0f); // Current velocity vector
 
 	glEnable(GL_DEPTH_TEST);
 
@@ -196,25 +207,52 @@ int APIENTRY WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
 			SetCursorPos(windowCenter.x, windowCenter.y);
 		}
 
-		// --- 4. SMOOTH KEYBOARD MOVEMENT ---
-		// usage of 0x8000 checks if key is currently down
-		float velocity = speed * deltaTime;
-
+		// --- 4. SMOOTH KEYBOARD MOVEMENT WITH ACCELERATION ---
+		glm::vec3 inputDir = glm::vec3(0.0f);
+		
 		if (GetAsyncKeyState('W') & 0x8000)
-			curCamPos += cameraFront * velocity;
+			inputDir += cameraFront;
 
 		if (GetAsyncKeyState('S') & 0x8000)
-			curCamPos -= cameraFront * velocity;
+			inputDir -= cameraFront;
 
 		if (GetAsyncKeyState('A') & 0x8000)
-			curCamPos -= glm::normalize(glm::cross(cameraFront, cameraUp)) * velocity;
+			inputDir -= glm::normalize(glm::cross(cameraFront, cameraUp));
 
 		if (GetAsyncKeyState('D') & 0x8000)
-			curCamPos += glm::normalize(glm::cross(cameraFront, cameraUp)) * velocity;
+			inputDir += glm::normalize(glm::cross(cameraFront, cameraUp));
 
 		// Escape to exit
 		if (GetAsyncKeyState(VK_ESCAPE) & 0x8000)
 			running = false;
+
+		// Apply acceleration or deceleration
+		if (glm::length(inputDir) > 0.0f)
+		{
+			// Normalize input direction and accelerate
+			inputDir = glm::normalize(inputDir);
+			velocity += inputDir * acceleration * deltaTime;
+			
+			// Clamp velocity to max speed
+			if (glm::length(velocity) > speed)
+				velocity = glm::normalize(velocity) * speed;
+		}
+		else
+		{
+			// Decelerate when no input
+			float currentSpeed = glm::length(velocity);
+			if (currentSpeed > 0.0f)
+			{
+				float newSpeed = currentSpeed - deceleration * deltaTime;
+				if (newSpeed < 0.0f)
+					velocity = glm::vec3(0.0f);
+				else
+					velocity = glm::normalize(velocity) * newSpeed;
+			}
+		}
+
+		// Apply velocity to camera position
+		curCamPos += velocity * deltaTime;
 
 		// --- 5. Update Camera Vectors ---
 		glm::vec3 direction;
@@ -230,6 +268,14 @@ int APIENTRY WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+		// Draw skybox first (with special depth settings handled internally)
+		glm::mat4 skyboxView = glm::mat4(glm::mat3(view)); // Remove translation from view matrix
+		//skyboxShader.UseProgram();
+		//skyboxShader.ModifyUniformMat4("view", skyboxView);
+		//skyboxShader.ModifyUniformMat4("projection", projection);
+		//box.Draw();
+
+		// Draw regular geometry
 		shader.UseProgram();
 		shader.ModifyUniformMat4("mvp", mvp);
 		cube.Draw();

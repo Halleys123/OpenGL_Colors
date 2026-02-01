@@ -4,12 +4,30 @@ void GlClearError() {
 	while (glGetError());
 }
 
-bool GlLogError(const char* function, const char* file, int line) {
-	GLenum err;
+static const char* GetGLErrorString(GLenum error) {
+    switch (error) {
+    case GL_INVALID_ENUM:                  return "INVALID_ENUM";
+    case GL_INVALID_VALUE:                 return "INVALID_VALUE";
+    case GL_INVALID_OPERATION:             return "INVALID_OPERATION";
+    case GL_STACK_OVERFLOW:                return "STACK_OVERFLOW";
+    case GL_STACK_UNDERFLOW:               return "STACK_UNDERFLOW";
+    case GL_OUT_OF_MEMORY:                 return "OUT_OF_MEMORY";
+    case GL_INVALID_FRAMEBUFFER_OPERATION: return "INVALID_FRAMEBUFFER_OPERATION";
+    default:                               return "UNKNOWN_ERROR";
+    }
+}
 
-	if (err = glGetError()) {
-		printf("\x1b[38;2;200;20;0m[OpenGL Error]\x1b[0m\nError in file: %s\nFunction Name: %s\nLine Number: %d\n", file, function, line);
-		return true;
-	}
-	return false;
+bool GlLogError(const char* function, const char* file, int line) {
+    bool hasError = false;
+    // Use a loop because OpenGL can store multiple errors in a queue
+    while (GLenum err = glGetError()) {
+        char buffer[1024];
+        sprintf_s(buffer,
+            "[OpenGL Error %s (0x%04X)]\n"
+            "File: %s\nFunction: %s\nLine: %d\n\n",
+            GetGLErrorString(err), err, file, function, line);
+        OutputDebugStringA(buffer);
+        hasError = true;
+    }
+    return hasError;
 }
