@@ -455,6 +455,7 @@
   <ItemGroup>
     <None Include=".gitattributes" />
     <None Include=".gitignore" />
+    <None Include="file.md" />
     <None Include="shaders\Skybox.glsl" />
     <None Include="include\glm\detail\func_common.inl" />
     <None Include="include\glm\detail\func_common_simd.inl" />
@@ -598,9 +599,15 @@
     <None Include="include\glm\gtx\wrap.inl" />
     <None Include="shaders\One.glsl" />
     <None Include="shaders\Two.glsl" />
+    <None Include="src\file.md">
+      <SubType>
+      </SubType>
+    </None>
     <None Include="Textures\skyBox.hdr" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="Images\image.png" />
+    <Image Include="Images\side.png" />
     <Image Include="Textures\height.png" />
     <Image Include="Textures\roof.jpg" />
     <Image Include="Textures\texture.jpg" />
