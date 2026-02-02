@@ -36,10 +36,11 @@ in vec3 frag_normal;
 
 // Attenuation constants
 float ConstantAttenuation = 0.2;
-float LinearAttenuation = 0.23;
-float QuadraticAttenuation = 0.12;
-const float Shininess = 32.0;
-const float Strength = 0.5;
+float LinearAttenuation = 1.0;
+float QuadraticAttenuation = 1.0;
+
+const float Shininess = 1.0;
+const float Strength = 1.5;
 
 uniform vec3 directionalLightPosition;
 uniform vec3 directionalLightColor;

@@ -71,7 +71,7 @@ static glm::vec3 curCamLookAt = glm::vec3(0.0f, 0.0f, 0.0f);
 static glm::vec3 cameraFront = glm::normalize(curCamLookAt - curCamPos);
 static glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
 
-static glm::vec3 directionalLightPosition = glm::vec3(-1.0f, 3.0f, 1.5f);
+static glm::vec3 directionalLightPosition = glm::vec3(-1.0f, 0.5f, -0.0f);
 static glm::vec3 directionalLightColor = glm::vec3(1.0f, 0.5f, 0.5f);
 
 int APIENTRY WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPSTR cmd, _In_ int nCmd)
