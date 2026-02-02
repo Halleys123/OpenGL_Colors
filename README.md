@@ -7,3 +7,7 @@ For now I have done till textures (medium), buffer objects (pixel, vertex, index
 
 ![Image one](Images/image.png)
 ![Side](Images/side.png)
+
+[Update 3 Feb 2026] - Added some lighting
+
+![Lighting](./Images/light.png)

@@ -45,7 +45,6 @@ uniform vec3 directionalLightPosition;
 uniform vec3 directionalLightColor;
 uniform vec3 ambientLightColor;
 uniform vec3 EyeDirection;
-
 uniform sampler2D tex;
 
 out vec4 FragColor;

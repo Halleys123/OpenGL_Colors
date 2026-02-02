@@ -118,6 +118,17 @@ void Shader::ModifyUniformMat4(const char *uniformName, glm::mat4 &matrix)
 
 	glUniformMatrix4fv(location, 1, GL_FALSE, &matrix[0][0]);
 }
+void Shader::ModifyUniformMat3(const char* uniformName, glm::mat3& matrix) {
+	int location = glGetUniformLocation(this->ShaderProgramID, uniformName);
+	if (location == -1)
+	{
+		printf("Unable to find Uniform named: %s", uniformName);
+		return;
+	}
+
+	glUniformMatrix3fv(location, 1, GL_FALSE, &matrix[0][0]);
+
+}
 
 void Shader::ModifyUniformVec3(const char* uniformName, float x, float y, float z) {
 	int location = glGetUniformLocation(this->ShaderProgramID, uniformName);

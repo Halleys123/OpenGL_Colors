@@ -14,7 +14,9 @@ public:
 	Shader(const char* ShaderPath);
 	void UseProgram();
 	void ModifyUniformMat4(const char* uniformName, glm::mat4& matrix);
+	void ModifyUniformMat3(const char* uniformName, glm::mat3& matrix);
 	void ModifyUniformVec3(const char* uniformName, float x, float y, float z);
 	void ModifyUniform1i(const char* uniformName, int value);
 	void ModifyUniform1f(const char* uniformName, float value);
+
 };
