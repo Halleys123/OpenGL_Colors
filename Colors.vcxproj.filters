@@ -974,6 +974,9 @@
     <ClInclude Include="include\glm\simd\vector_relational.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\Properties.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\One.glsl" />
@@ -1404,7 +1407,7 @@
     <None Include="README.md" />
     <None Include="shaders\Skybox.glsl" />
     <None Include="src\file.md" />
-    <None Include="glsl shaders\One.glsl" />
+    <None Include="shaders\Surface.glsl" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Textures\texture.jpg">
@@ -1423,6 +1426,12 @@
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="Images\light.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Textures\ground_color.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Textures\ground_normal.jpg">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>

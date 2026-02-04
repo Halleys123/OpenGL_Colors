@@ -12,4 +12,5 @@ public:
 	Texture(const char* texturePath, GLenum TextureType, GLenum InternalFormat = GL_RGB8, GLenum ExternalFormat = GL_RGB, int requiredComponents = 0);
 	~Texture();
 	void activate(int textureUnit = 0);
+	void setProperty(GLenum property, GLenum value);
 };

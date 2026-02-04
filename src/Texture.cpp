@@ -31,8 +31,8 @@ Texture::Texture(const char* texturePath, GLenum TextureType, GLenum InternalFor
 
 	glSamplerParameteri(this->SamplerID, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glSamplerParameteri(this->SamplerID, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glSamplerParameteri(this->SamplerID, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	glSamplerParameteri(this->SamplerID, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	glSamplerParameteri(this->SamplerID, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
+	glSamplerParameteri(this->SamplerID, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
 
 	unsigned int pbo;
 	GlCall(glGenBuffers(1, &pbo));
@@ -64,4 +64,8 @@ void Texture::activate(int textureUnit) {
 
 Texture::~Texture() {
 	glDeleteTextures(1, &this->TextureID);
+}
+
+void Texture::setProperty(GLenum property, GLenum value) {
+
 }

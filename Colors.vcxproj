@@ -440,6 +440,7 @@
     <ClInclude Include="include\KHR\khrplatform.h" />
     <ClInclude Include="include\LoadFile.hpp" />
     <ClInclude Include="include\Mesh.hpp" />
+    <ClInclude Include="include\Properties.hpp" />
     <ClInclude Include="include\Shader.hpp" />
     <ClInclude Include="include\stb_image.h" />
     <ClInclude Include="include\Texture.hpp" />
@@ -453,7 +454,6 @@
   <ItemGroup>
     <None Include=".gitattributes" />
     <None Include=".gitignore" />
-    <None Include="glsl shaders\One.glsl" />
     <None Include="README.md" />
     <None Include="shaders\Skybox.glsl" />
     <None Include="include\glm\detail\func_common.inl" />
@@ -598,6 +598,7 @@
     <None Include="include\glm\gtx\wrap.inl" />
     <None Include="shaders\One.glsl" />
     <None Include="shaders\lightCube.glsl" />
+    <None Include="shaders\Surface.glsl" />
     <None Include="src\file.md">
       <SubType>
       </SubType>
@@ -608,6 +609,8 @@
     <Image Include="Images\image.png" />
     <Image Include="Images\light.png" />
     <Image Include="Images\side.png" />
+    <Image Include="Textures\ground_color.jpg" />
+    <Image Include="Textures\ground_normal.jpg" />
     <Image Include="Textures\height.png" />
     <Image Include="Textures\roof.jpg" />
     <Image Include="Textures\texture.jpg" />

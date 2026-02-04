@@ -6,7 +6,8 @@ layout(location = 2) in vec3 color;
 layout(location = 3) in vec3 normal;
 
 uniform mat4 mvp;
-uniform mat3 mv;
+uniform mat4 model_matrix;
+uniform mat3 normal_matrix;
 
 out vec3 frag_VertexColor;
 out vec2 frag_uv;
@@ -18,8 +19,8 @@ out vec3 frag_normal;
 void main() {
 	frag_VertexColor = color;
 	frag_uv = uv;
-	frag_pos = mv * position;
-	frag_world_normal = normalize(mv * normal);
+	frag_pos = vec3(model_matrix * vec4(position, 1.0));
+	frag_world_normal = normalize(normal_matrix * normal);
 	frag_normal = normal;
 	gl_Position = mvp * vec4(position, 1.0);
 }
@@ -40,7 +41,7 @@ float LinearAttenuation = 1.0;
 float QuadraticAttenuation = 1.0;
 
 const float Shininess = 1.0;
-const float Strength = 1.5;
+const float Strength = 0.5;
 
 uniform vec3 directionalLightPosition;
 uniform vec3 directionalLightColor;

@@ -10,69 +10,10 @@
 #include "Shader.hpp"
 #include "Texture.hpp"
 
-float data[18 * 11] = {
-	// Front triangle
-	-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,  1.0f, 0.0f, 0.0f,  0.0f, 0.0f, 1.0f,
-	0.5f, -0.5f,  0.5f,  1.0f, 0.0f,  0.0f, 1.0f, 0.0f,  0.0f, 0.0f, 1.0f,
-	0.0f,  0.5f,  0.5f,  0.5f, 1.0f,  0.0f, 0.0f, 1.0f,  0.0f, 0.0f, 1.0f,
-
-	// Back triangle
-	-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,  1.0f, 0.0f, 0.0f,  0.0f, 0.0f, -1.0f,
-	0.5f, -0.5f, -0.5f,  1.0f, 0.0f,  0.0f, 1.0f, 0.0f,  0.0f, 0.0f, -1.0f,
-	0.0f,  0.5f, -0.5f,  0.5f, 1.0f,  0.0f, 0.0f, 1.0f,  0.0f, 0.0f, -1.0f,
-
-	// Left side vertices - CORRECTED NORMALS
-	-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,  1.0f, 0.0f, 0.0f,  -0.447f, 0.894f, 0.0f,
-	-0.5f, -0.5f, -0.5f,  1.0f, 0.0f,  0.0f, 1.0f, 0.0f,  -0.447f, 0.894f, 0.0f,
-	0.0f,  0.5f, -0.5f,  1.0f, 1.0f,  0.0f, 0.0f, 1.0f,  -0.447f, 0.894f, 0.0f,
-	0.0f,  0.5f,  0.5f,  0.0f, 1.0f,  1.0f, 1.0f, 1.0f,  -0.447f, 0.894f, 0.0f,
-
-	// Right side vertices - CORRECTED NORMALS
-	0.5f, -0.5f,  0.5f,  0.0f, 0.0f,  1.0f, 0.0f, 0.0f,  0.447f, 0.894f, 0.0f,
-	0.5f, -0.5f, -0.5f,  1.0f, 0.0f,  0.0f, 1.0f, 0.0f,  0.447f, 0.894f, 0.0f,
-	0.0f,  0.5f, -0.5f,  1.0f, 1.0f,  0.0f, 0.0f, 1.0f,  0.447f, 0.894f, 0.0f,
-	0.0f,  0.5f,  0.5f,  0.0f, 1.0f,  1.0f, 1.0f, 1.0f,  0.447f, 0.894f, 0.0f,
-
-	// Bottom side
-	-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,  1.0f, 0.0f, 0.0f,  0.0f, -1.0f, 0.0f,
-	0.5f, -0.5f,  0.5f,  1.0f, 0.0f,  0.0f, 1.0f, 0.0f,  0.0f, -1.0f, 0.0f,
-	0.5f, -0.5f, -0.5f,  1.0f, 1.0f,  0.0f, 0.0f, 1.0f,  0.0f, -1.0f, 0.0f,
-	-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,  1.0f, 1.0f, 1.0f,  0.0f, -1.0f, 0.0f
-};
-
-static unsigned int index[24] = {
-	// Front triangle
-	0, 1, 2,
-
-	// Back triangle
-	3, 5, 4,
-
-	// Left side (2 triangles)
-	6, 7, 8,
-	6, 8, 9,
-
-	// Right side (2 triangles)
-	10, 12, 11,
-	10, 13, 12,
-
-	// Bottom side (2 triangles)
-	14, 15, 16,
-	14, 16, 17
-};
+#include "Properties.hpp"
 
 extern HDC hdc;
 extern HGLRC rc;
-
-static float yaw = -45.0f;
-static float pitch = 0.0f;
-
-static glm::vec3 curCamPos = glm::vec3(0.0f, 0.0f, 3.0f);
-static glm::vec3 curCamLookAt = glm::vec3(0.0f, 0.0f, 0.0f);
-static glm::vec3 cameraFront = glm::normalize(curCamLookAt - curCamPos);
-static glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
-
-static glm::vec3 directionalLightPosition = glm::vec3(-1.0f, 0.5f, -0.0f);
-static glm::vec3 directionalLightColor = glm::vec3(1.0f, 0.5f, 0.5f);
 
 int APIENTRY WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPSTR cmd, _In_ int nCmd)
 {
@@ -109,91 +50,42 @@ int APIENTRY WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
 	cube.AddVertexAttrib(2, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 11, (void*)(5 * sizeof(float)));
 	cube.AddVertexAttrib(3, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 11, (void*)(8 * sizeof(float)));
 
-	Shader shader("./shaders/One.glsl");
-	Texture wood("./Textures/texture.jpg", GL_TEXTURE_2D, GL_RGB8, GL_RGB);
-	//Texture ground("./Textures/ground_color.jpg", GL_TEXTURE_2D, GL_RGB8, GL_RGB);
-	//Texture groundNormal("./Textures/ground_normal.jpg", GL_TEXTURE_2D, GL_RGB8, GL_RGB);
-
-	const double targetFrameTime = 1.0 / 90.0;
-
-	int maxUnits;
-	glGetIntegerv(GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS, &maxUnits);
-		printf("Max Texture Units available: %d\n", maxUnits);
-
-	LARGE_INTEGER freq;
-	QueryPerformanceFrequency(&freq);
-
-	LARGE_INTEGER last;
-	QueryPerformanceCounter(&last);
-	LARGE_INTEGER now;
-
-	glm::mat4 model = glm::mat4(1.0f);
-	glm::mat4 view = glm::lookAt(glm::vec3(0.0f, 0.0f, 3.0f), glm::vec3(0.5f, 0.5f, 0.333f), glm::vec3(0.0f, 1.0f, 0.0f));
-	glm::mat4 projection = glm::perspective(glm::radians(60.0f), 720.0f / 480.0f, 0.1f, 100.0f);
-
-	glm::mat4 mvp = projection * view * model;
-	glm::mat3 mv = glm::transpose(glm::inverse(glm::mat3(model)));
-
-	wood.activate(0);
-	//ground.activate(0);
-	//groundNormal.activate(1);
-
-	shader.UseProgram();
-
-	shader.ModifyUniformVec3("ambientLightColor", 0.2f, 0.2f, 0.2f);
-	shader.ModifyUniformVec3("directionalLightPosition", directionalLightPosition.x, directionalLightPosition.y, directionalLightPosition.z);
-	shader.ModifyUniformVec3("directionalLightColor", 1.0f, 0.5f, 0.0f);
-	shader.ModifyUniform1i("tex", 0);
-
-	//shader.ModifyUniform1i("ground", 0);
-	//shader.ModifyUniform1i("ground_normal", 1);
-
-	shader.ModifyUniformMat3("mv", mv);
-
-	float lightCube[8 * 3] = {
-		// Front Side
-		directionalLightPosition.x - 0.15f, directionalLightPosition.y - 0.15f, directionalLightPosition.z + 0.15f,  // 0: front-bottom-left
-		directionalLightPosition.x + 0.15f, directionalLightPosition.y - 0.15f, directionalLightPosition.z + 0.15f,  // 1: front-bottom-right
-		directionalLightPosition.x - 0.15f, directionalLightPosition.y + 0.15f, directionalLightPosition.z + 0.15f,  // 2: front-top-left
-		directionalLightPosition.x + 0.15f, directionalLightPosition.y + 0.15f, directionalLightPosition.z + 0.15f,  // 3: front-top-right
-
-		// Back Side
-		directionalLightPosition.x - 0.15f, directionalLightPosition.y - 0.15f, directionalLightPosition.z - 0.15f,  // 4: back-bottom-left
-		directionalLightPosition.x + 0.15f, directionalLightPosition.y - 0.15f, directionalLightPosition.z - 0.15f,  // 5: back-bottom-right
-		directionalLightPosition.x - 0.15f, directionalLightPosition.y + 0.15f, directionalLightPosition.z - 0.15f,  // 6: back-top-left
-		directionalLightPosition.x + 0.15f, directionalLightPosition.y + 0.15f, directionalLightPosition.z - 0.15f,   // 7: back-top-right
-	};
-
-	unsigned int lightCubeIndex[36] = {
-		// Front face
-		0, 1, 2,
-		1, 3, 2,
-
-		// Back face
-		4, 6, 5,
-		5, 6, 7,
-
-		// Left face
-		4, 0, 6,
-		0, 2, 6,
-
-		// Right face
-		1, 5, 3,
-		5, 7, 3,
-
-		// Top face
-		2, 3, 6,
-		3, 7, 6,
-
-		// Bottom face
-		0, 4, 1,
-		4, 5, 1
-	};
-
 	Mesh light(27, lightCube, 36, lightCubeIndex);
 	light.AddVertexAttrib(0, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 3, 0);
 
+	Mesh surface(32, surface_mesh_coords, 6, surface_mesh_index);
+	surface.AddVertexAttrib(0, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 5, 0);
+	surface.AddVertexAttrib(1, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 5, (void*)(sizeof(float) * 3));
+
 	Shader lightShader("./shaders/lightCube.glsl");
+	Shader shader("./shaders/One.glsl");
+	Shader surfaceShader("./shaders/Surface.glsl");
+
+	Texture wood("./Textures/texture.jpg", GL_TEXTURE_2D, GL_RGB8, GL_RGB);
+	Texture ground("./Textures/ground_color.jpg", GL_TEXTURE_2D, GL_RGB8, GL_RGB);
+	Texture ground_normal("./Textures/ground_normal.jpg", GL_TEXTURE_2D, GL_RGB8, GL_RGB);
+
+	wood.activate(0);
+	ground.activate(1);
+	ground_normal.activate(2);
+
+	shader.UseProgram();
+	shader.ModifyUniformVec3("ambientLightColor", 0.2f, 0.2f, 0.2f);
+	shader.ModifyUniformVec3("directionalLightPosition", directionalLightPosition.x, directionalLightPosition.y, directionalLightPosition.z);
+	shader.ModifyUniformVec3("directionalLightColor", directionalLightColor.x, directionalLightColor.y, directionalLightColor.z);
+	shader.ModifyUniform1i("tex", 0);
+	shader.ModifyUniformMat4("model_matrix", model_matrix);
+	shader.ModifyUniformMat3("normal_matrix", normal_matrix);
+
+	surfaceShader.UseProgram();
+	surfaceShader.ModifyUniformVec3("ambientLightColor", 0.2f, 0.2f, 0.2f);
+	surfaceShader.ModifyUniformVec3("directionalLightPosition", directionalLightPosition.x, directionalLightPosition.y, directionalLightPosition.z);
+	surfaceShader.ModifyUniformVec3("directionalLightColor", directionalLightColor.x, directionalLightColor.y, directionalLightColor.z);
+	surfaceShader.ModifyUniformMat4("model_matrix", model_matrix);
+	surfaceShader.ModifyUniformMat3("normal_matrix", normal_matrix);
+	surfaceShader.ModifyUniform1i("ground", 1);
+	surfaceShader.ModifyUniform1i("ground_normal", 2);
+
 	lightShader.UseProgram();
 	lightShader.ModifyUniformVec3("lightColor", directionalLightColor.x, directionalLightColor.y, directionalLightColor.z);
 
@@ -208,8 +100,14 @@ int APIENTRY WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
 	float sensitivity = 0.1f;
 	float acceleration = 10.0f;  
 	float deceleration = 15.0f;  
+
+	const double targetFrameTime = 1.0 / 90.0;
+
+	int maxUnits;
 	
-	glm::vec3 velocity = glm::vec3(0.0f); 
+	LARGE_INTEGER freq, last, now;
+	QueryPerformanceFrequency(&freq);
+	QueryPerformanceCounter(&last);
 
 	glEnable(GL_DEPTH_TEST);
 
@@ -270,6 +168,27 @@ int APIENTRY WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
 		if (GetAsyncKeyState('D') & 0x8000)
 			inputDir += glm::normalize(glm::cross(cameraFront, cameraUp));
 
+		if (GetAsyncKeyState(VK_UP) & 0x8000) {
+			if (GetAsyncKeyState(VK_LSHIFT) & 0x8000)
+				pitch += 0.05f;
+			else 
+				inputDir += glm::normalize(cameraUp);
+		}
+
+		if (GetAsyncKeyState(VK_DOWN) & 0x8000)
+		{
+			if (GetAsyncKeyState(VK_LSHIFT) & 0x8000)
+				pitch -= 0.05f;
+			else
+				inputDir -= glm::normalize(cameraUp);
+		}
+		
+		if (GetAsyncKeyState(VK_LEFT) & 0x8000)
+			yaw -= 0.05f;
+
+		if (GetAsyncKeyState(VK_RIGHT) & 0x8000)
+			yaw += 0.05f;
+
 		// Escape to exit
 		if (GetAsyncKeyState(VK_ESCAPE) & 0x8000)
 			running = false;
@@ -311,9 +230,8 @@ int APIENTRY WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
 
 		// --- 6. Render ---
 		view = glm::lookAt(curCamPos, curCamPos + cameraFront, cameraUp);
-		mvp = projection * view * model;
+		mvp = projection * view * model_matrix;
 
-		shader.ModifyUniformVec3("EyePosition", cameraFront.x, cameraFront.y, cameraFront.z);
 
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -321,11 +239,17 @@ int APIENTRY WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
 		// Draw regular geometry
 		shader.UseProgram();
 		shader.ModifyUniformMat4("mvp", mvp);
+		shader.ModifyUniformVec3("EyePosition", curCamPos.x, curCamPos.y, curCamPos.z);
 		cube.Draw();
 
 		lightShader.UseProgram();
 		lightShader.ModifyUniformMat4("mvp", mvp);
 		light.Draw();
+
+		surfaceShader.UseProgram();
+		surfaceShader.ModifyUniformMat4("mvp", mvp);
+		surfaceShader.ModifyUniformVec3("EyePosition", curCamPos.x, curCamPos.y, curCamPos.z);
+		surface.Draw();
 
 		SwapBuffers(hdc);
 	}
